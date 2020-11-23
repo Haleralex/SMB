@@ -87,12 +87,27 @@ public static class ClipExtension
             AnimationCurve curve = AnimationCurve.Linear(0, go.transform.localPosition.z, 1, go.transform.localPosition.z+0.05f);
             float y = rand.Next(-5,5) * 0.01f;
             AnimationCurve curve1 = AnimationCurve.Linear(0,go.transform.localPosition.z, 1, go.transform.localPosition.y + y);
+            AnimationCurve curve2 = AnimationCurve.Linear(0,go.transform.localPosition.x, 1, go.transform.localPosition.x);
             clip.SetCurve(path, typeof(Transform), "localPosition.y", curve1);
             clip.SetCurve(path, typeof(Transform), "localPosition.z", curve);
+            clip.SetCurve(path, typeof(Transform), "localPosition.x", curve2);
         }
         return clip;
     }
 
+    public static AnimationClip CreateAnimationClipHalf(List<GameObject> leftPartList)
+    {
+        var clip = new AnimationClip();
+        clip.name = "kalkmsdf";
+        foreach(var go in leftPartList){
+            string path = GetGameObjectPath(go);
+            AnimationCurve curve = AnimationCurve.Linear(0, go.transform.localPosition.z, 1,go.transform.localPosition.z+0.05f);
+            AnimationCurve curve2 = AnimationCurve.Linear(0, go.transform.localPosition.x, 1,go.transform.localPosition.x);
+            clip.SetCurve(path, typeof(Transform), "localPosition.z", curve);
+            clip.SetCurve(path, typeof(Transform), "localPosition.x", curve2);
+        }
+        return clip;
+    }
 
     public static AnimationClip CreateAnimationClipFromConditions(List<AnimCondition> first, List<AnimCondition> second)
     {
@@ -120,16 +135,6 @@ public static class ClipExtension
         path.Remove(0,15);*/
         return path;
     }
-    public static AnimationClip CreateAnimationClipHalf(List<GameObject> leftPartList)
-    {
-        var clip = new AnimationClip();
-        foreach(var go in leftPartList){
-            string path = GetGameObjectPath(go);
-            AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 0.05f);
-            clip.SetCurve(path, typeof(Transform), "localPosition.z", curve);
-        }
-        return clip;
-    }
 
 
     public static List<AnimCondition> GetStartAndEndPos(this AnimationClip animationClip){
@@ -154,6 +159,32 @@ public static class ClipExtension
         var i = parent.name + ("\\") +  childName;
         return GameObject.Find(i);
     }
+
+    public static AnimationClip CreateFromDictionary(Dictionary<GameObject,Queue<KindaKey>> arrayKindaKeys){
+        var clip = new AnimationClip();
+        foreach(GameObject k in arrayKindaKeys.Keys){
+            var t = arrayKindaKeys[k].ToArray();
+            AnimationCurve curvex = AnimationCurve.Linear(t[0].timeBeforeTheKey, t[0].pos.x, t[1].timeBeforeTheKey,t[1].pos.x);
+            AnimationCurve curvey = AnimationCurve.Linear(t[0].timeBeforeTheKey, t[0].pos.y, t[1].timeBeforeTheKey,t[1].pos.y);
+            AnimationCurve curvez = AnimationCurve.Linear(t[0].timeBeforeTheKey, t[0].pos.z, t[1].timeBeforeTheKey,t[1].pos.z);
+            var time = t[0].timeBeforeTheKey + t[1].timeBeforeTheKey;
+            for(int i = 2; i<t.Length; i++){
+                time+=t[i].timeBeforeTheKey;
+                curvex.AddKey(time,t[i].pos.x);
+                curvey.AddKey(time,t[i].pos.y);
+                curvez.AddKey(time,t[i].pos.z);
+            }
+            clip.SetCurve(GetGameObjectPath(k), typeof(Transform), "localPosition.x", curvex);
+            clip.SetCurve(GetGameObjectPath(k), typeof(Transform), "localPosition.y", curvey);
+            clip.SetCurve(GetGameObjectPath(k), typeof(Transform), "localPosition.z", curvez);
+        }
+        return clip;
+    }
+}
+
+public struct KindaKey{
+    public Vector3 pos;
+    public float timeBeforeTheKey;
 }
 
 public struct AnimCondition{
