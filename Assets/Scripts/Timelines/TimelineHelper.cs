@@ -7,7 +7,7 @@ using UnityEngine.Playables;
 using System;
 using UnityEditor;
 using System.Reflection;
-using UnityEditor.SceneManagement;
+
 
 public class TimelineHelper
 {
@@ -28,7 +28,7 @@ public class TimelineHelper
         }
         return lst.ToArray<AnimationClip>();
     }
-    public static TimelineAsset CreateCopyTimeline(TimelineAsset original, PlayableDirector directorInstance)
+    /*public static TimelineAsset CreateCopyTimeline(TimelineAsset original, PlayableDirector directorInstance)
     {
         var clone = UnityEngine.Object.Instantiate(original);
         Undo.RegisterCreatedObjectUndo(clone, "Create clip");
@@ -68,13 +68,13 @@ public class TimelineHelper
                         directorInstance.SetReferenceValue(newPropertyName, originalReference);
                         exposedNameProperty.SetValue(exposedRefInstance, newPropertyName);
 
-                        if (!EditorApplication.isPlaying)
-                            EditorSceneManager.MarkSceneDirty(directorInstance.gameObject.scene);
+                        //if (!EditorApplication.isPlaying)
+                            //EditorSceneManager.MarkSceneDirty(directorInstance.gameObject.scene);
                     }
                 }
                 fi.SetValue(clone, exposedRefInstance);
             }
         }
         return clone as TimelineAsset;
-    }
+    }*/
 }
