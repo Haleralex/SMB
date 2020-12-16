@@ -5,13 +5,8 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 namespace Test
 {
-
-    [RequireComponent(typeof(Animator))]
     public class StartStateBehaviour : MonoBehaviour
     {
-        //is needed to State Machine
-        private Animator anim;
-
         //is needed to playing ARQTimelines
         [SerializeField]
         private ARQTimelineDirector _arqTimelineDirector;
@@ -28,25 +23,12 @@ namespace Test
 
         private void OnEnable()
         {
-            SceneLinkedSMB<StartStateBehaviour>.Initialise(anim, this);
             _stateTimelines.Add("Half", Create1Timeline());
             _stateTimelines.Add("HalfParts", Create2Timeline());
         }
 
-        public void AddNewBehaviour(string nameOfState, ARQTimeline timeline)
-        {
-
-        }
-        private void Awake()
-        {
-            anim = GetComponent<Animator>();
-        }
         public void StartState(string nameState)
         {
-            anim.ResetTrigger("Half");
-            anim.ResetTrigger("HalfParts");
-            anim.SetTrigger(nameState);
-
             if (QueueMod)
             {
                 if (!_arqTimelineDirector.ARQTimeline || !_arqTimelineDirector.ARQTimeline._isStarted)
@@ -75,10 +57,6 @@ namespace Test
                 _arqTimelineDirector.Play();
             }
         }
-
-
-
-
 
         #region test 
         [SerializeField]
@@ -125,5 +103,6 @@ namespace Test
             return _arqTimeline;
         }
         #endregion
+    
     }
 }
