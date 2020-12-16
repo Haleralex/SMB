@@ -10,7 +10,7 @@ namespace Test
     {
         #region Fields
         private List<ARQTimelineTrack> _listARQTimelineTrack = new List<ARQTimelineTrack>();
-
+        
 
         public float duration { 
             get 
@@ -47,12 +47,11 @@ namespace Test
         #region Methods
         public T CreateTrack<T>() where T : ARQTimelineTrack
         {
-            T addedTrack = ScriptableObject.CreateInstance<T>();
+            T addedTrack = CreateInstance<T>();
             AddTrack(addedTrack);
             addedTrack.BindTimeline(this);
             return addedTrack;
         }
-
         private void AddTrack<T>(T addedTrack) where T : ARQTimelineTrack
         {
             _listARQTimelineTrack.Add(addedTrack);
@@ -69,7 +68,6 @@ namespace Test
 
         public void Rewind(float time)
         {
-            //_isPaused = true;
             Time = time;
             foreach (ARQTimelineTrack timelineTrack in _listARQTimelineTrack)
             {

@@ -1,8 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Animations;
 
 public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB where TMonoBehaviour : MonoBehaviour
 {
+    public string _nameBehaviour = "";
+
+    [SerializeField]
+    private protected List<Test.Transition> Transitions;
+
     protected TMonoBehaviour m_MonoBehaviour;
     private bool m_FirstFrameHappened;
     private bool m_LastFrameHappened;
