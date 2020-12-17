@@ -7,16 +7,37 @@ namespace ARQStateMachine
 {
     public class State
     {
-        public List<Test.Transition> _connectedStates = new List<Test.Transition>();
+        public event Action StateEntered;
+        public event Action StateExited;
+
+        public List<Test.Transition> _listTransitions = new List<Test.Transition>();
         public Test.ARQTimeline timeline;
-        public event Action<State, State> NodeComplete;
+        public event Action<State, string> NodeComplete;
 
         private bool _isStarted = false;
         private bool _isCompleted = false;
 
-        public string _nodeName = " ";
+        public bool _isStart = false;
+
+        public readonly string _nodeName = " ";
 
         
+        public State(string nodeName, Test.ARQTimeline timeline, List<Test.Transition> listTransitions, bool isStart)
+        {
+            _isStart = isStart;
+            _nodeName = nodeName;
+            this.timeline = timeline;
+            _listTransitions = listTransitions;
+        }
+
+        public State()
+        {
+            _isStart = false;
+            _nodeName = " ";
+            timeline = null;
+            _listTransitions = new List<Test.Transition>();
+        }
+
         public void Tick()
         {
             if (!_isStarted || _isCompleted)
@@ -50,7 +71,7 @@ namespace ARQStateMachine
 
         protected string GoNext()
         {
-            foreach(var k in _connectedStates)
+            foreach(var k in _listTransitions)
             {
                 if (Input.GetKeyDown(k._keyCode))
                 {
@@ -66,11 +87,11 @@ namespace ARQStateMachine
         }
         protected void OnEnter()
         {
-
+            StateEntered?.Invoke();
         }
         protected void OnExit()
         {
-
+            StateExited?.Invoke();
         }
     }
 }

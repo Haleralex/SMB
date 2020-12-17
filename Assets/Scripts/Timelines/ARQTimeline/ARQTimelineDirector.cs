@@ -39,7 +39,6 @@ namespace Test
             }
             else
             {
-                Debug.Log("HHHHHHHHHHHH");
                 Resume();
             }
         }
