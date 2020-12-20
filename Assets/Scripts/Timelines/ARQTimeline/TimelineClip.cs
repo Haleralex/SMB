@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Test
+namespace ARQTimeline
 {
-    public abstract class ARQTimelineClip : ScriptableObject, ISerializationCallbackReceiver
+    public abstract class TimelineClip
     {
         public float _startTime = 0.0f;
 
@@ -23,20 +23,11 @@ namespace Test
 
         public Object asset { get; set; }
 
-        public virtual void Play(Animation animation, float time)
+        public virtual void Play<T>(T director, float time)
         {
             
         }
-        public virtual void Rewind(Animation animation, float time)
-        {
-            
-        }
-        public void OnAfterDeserialize()
-        {
-            
-        }
-
-        public void OnBeforeSerialize()
+        public virtual void Rewind<T>(T director, float time)
         {
             
         }

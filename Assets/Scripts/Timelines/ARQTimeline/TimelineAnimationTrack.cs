@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Test
+namespace ARQTimeline
 {
-    public class ARQTimelineAnimationTrack : ARQTimelineTrack
+    public class TimelineAnimationTrack : TimelineTrack
     {
         private Animation _animation;
         public Animation Animation
@@ -21,10 +21,10 @@ namespace Test
 
         public override void CheckTime(float time)
         {
-            foreach(ARQTimelineClip arqTimelineClip in _listARQTimelineClips){
+            foreach(TimelineClip arqTimelineClip in _listARQTimelineClips){
                 if(arqTimelineClip._startTime<=time && arqTimelineClip._endTime >= time && !arqTimelineClip.wasStarted)
                 {
-                    (arqTimelineClip as ARQTimelineAnimationClip).Play(_animation,time);
+                    (arqTimelineClip as TimelineAnimationClip).Play(_animation, time);
                     arqTimelineClip.wasStarted = true;
                 }
             }
@@ -33,11 +33,11 @@ namespace Test
         {
             var wasRewind = false;
 
-            foreach (ARQTimelineClip arqTimelineClip in _listARQTimelineClips)
+            foreach (TimelineClip arqTimelineClip in _listARQTimelineClips)
             {
                 if (time >= arqTimelineClip._startTime && time <= arqTimelineClip._endTime)
                 {
-                    arqTimelineClip.Rewind(_animation, time);
+                    (arqTimelineClip as TimelineAnimationClip).Rewind(_animation, time);
                     arqTimelineClip.wasStarted = false;
                     wasRewind = true;
                 }
@@ -48,8 +48,8 @@ namespace Test
             }
             if (!wasRewind)
             {
-                ARQTimelineClip lastClip = _listARQTimelineClips[0];
-                foreach(ARQTimelineClip arqTimelineClip in _listARQTimelineClips)
+                TimelineClip lastClip = _listARQTimelineClips[0];
+                foreach(TimelineClip arqTimelineClip in _listARQTimelineClips)
                 {
                     if(time > arqTimelineClip._endTime && arqTimelineClip._endTime> lastClip._endTime)
                     {
@@ -58,12 +58,12 @@ namespace Test
                 }
                 if (time > _listARQTimelineClips[0]._endTime)
                 {
-                    lastClip.Rewind(_animation, lastClip._endTime);
+                    (lastClip as TimelineAnimationClip).Rewind(_animation, lastClip._endTime);
                     lastClip.wasStarted = false;
                 }
                 else
                 {
-                    _listARQTimelineClips[0].Rewind(_animation, _listARQTimelineClips[0]._startTime);
+                    (_listARQTimelineClips[0] as TimelineAnimationClip).Rewind(_animation, _listARQTimelineClips[0]._startTime);
                     _listARQTimelineClips[0].wasStarted = false;
                 }
             }

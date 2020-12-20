@@ -10,8 +10,8 @@ namespace ARQStateMachine
         public event Action StateEntered;
         public event Action StateExited;
 
-        public List<Test.Transition> _listTransitions = new List<Test.Transition>();
-        public Test.ARQTimeline timeline;
+        public List<ARQTimeline.Transition> _listTransitions = new List<ARQTimeline.Transition>();
+        public ARQTimeline.Timeline timeline;
         public event Action<State, string> NodeComplete;
 
         private bool _isStarted = false;
@@ -22,7 +22,7 @@ namespace ARQStateMachine
         public readonly string _nodeName = " ";
 
         
-        public State(string nodeName, Test.ARQTimeline timeline, List<Test.Transition> listTransitions, bool isStart)
+        public State(string nodeName, ARQTimeline.Timeline timeline, List<ARQTimeline.Transition> listTransitions, bool isStart)
         {
             _isStart = isStart;
             _nodeName = nodeName;
@@ -35,7 +35,7 @@ namespace ARQStateMachine
             _isStart = false;
             _nodeName = " ";
             timeline = null;
-            _listTransitions = new List<Test.Transition>();
+            _listTransitions = new List<ARQTimeline.Transition>();
         }
 
         public void Tick()
@@ -51,6 +51,7 @@ namespace ARQStateMachine
 
         public void StartNode()
         {
+            
             _isCompleted = false;
             _isStarted = true;
             OnEnter();

@@ -5,20 +5,20 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
-namespace Test
+namespace ARQTimeline
 {
-    public class ARQTimelineDirector : MonoBehaviour
+    public class TimelineDirector : MonoBehaviour
     {
         [SerializeField]
         private Slider slider;
 
         private static readonly WaitForEndOfFrame _frameWait = new WaitForEndOfFrame();
-        public event Action<ARQTimelineDirector> Stopped;
-        public event Action<ARQTimelineDirector> Played;
-        public event Action<ARQTimelineDirector> Paused;
+        public event Action<TimelineDirector> Stopped;
+        public event Action<TimelineDirector> Played;
+        public event Action<TimelineDirector> Paused;
         public Action Finished = delegate { };
-        private ARQTimeline _arqTimeline;
-        public ARQTimeline ARQTimeline { 
+        private Timeline _arqTimeline;
+        public Timeline ARQTimeline { 
             get 
             {
                 return _arqTimeline;
@@ -55,7 +55,7 @@ namespace Test
 
         public void Stop(){
             StopAllCoroutines();
-            if (_arqTimeline)
+            if (_arqTimeline != null)
             {
                 _arqTimeline._isStarted = false;
                 _arqTimeline.Rewind(_arqTimeline.Time);

@@ -3,17 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Test
+namespace ARQTimeline
 {
-    public abstract class ARQTimelineTrack : ScriptableObject, ISerializationCallbackReceiver
+    public abstract class TimelineTrack
     {
-        public readonly List<ARQTimelineClip> _listARQTimelineClips = new List<ARQTimelineClip>();
+        public readonly List<TimelineClip> _listARQTimelineClips = new List<TimelineClip>();
 
         public float maxEndTime { 
             get
             {
                 float maxTime = 0.0f;
-                foreach(ARQTimelineClip timelineClip in _listARQTimelineClips)
+                foreach(TimelineClip timelineClip in _listARQTimelineClips)
                 {
                     if (timelineClip._endTime > maxTime)
                     {
@@ -24,31 +24,32 @@ namespace Test
             } 
         }
 
-        public T CreateClip<T>(float start, float duration) where T: ARQTimelineClip{
+        public T CreateClip<T>(float start, float duration) where T: TimelineClip, new(){
             T addedClip = CreateDefaultClip<T>();
             addedClip._startTime = start;
             addedClip._duration = duration;
             AddClip(addedClip);
             return addedClip;
         }
-        public T CreateDefaultClip<T>() where T: ARQTimelineClip{
-            T addedClip = ScriptableObject.CreateInstance<T>();
+        public T CreateDefaultClip<T>() where T: TimelineClip, new()
+        {
+            T addedClip = new T();
             AddClip(addedClip);
             return addedClip;
         }
-        public void AddClip<T>(T clip) where T:ARQTimelineClip {
+        public void AddClip<T>(T clip) where T:TimelineClip {
             _listARQTimelineClips.Add(clip);
         }
-        public void DeleteClip<T>(T clip) where T:ARQTimelineClip {
+        public void DeleteClip<T>(T clip) where T:TimelineClip {
             _listARQTimelineClips.Remove(clip);
         }
 
-        public void BindTimeline(ARQTimeline aRQTimeline)
+        public void BindTimeline(Timeline aRQTimeline)
         {
             aRQTimeline.TimeWasChanged += ARQTimeline_TimeWasChanged;  
         }
 
-        private void ARQTimeline_TimeWasChanged(ARQTimeline timeline, float time)
+        private void ARQTimeline_TimeWasChanged(Timeline timeline, float time)
         {
             if (timeline._isStarted && !timeline._isPaused)
                 CheckTime(time);
@@ -63,15 +64,6 @@ namespace Test
         public virtual void Rewind(float time)
         {
 
-        }
-        public void OnAfterDeserialize()
-        {
-            
-        }
-
-        public void OnBeforeSerialize()
-        {
-            
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.UI;
 
-namespace Test
+namespace ARQTimeline
 {
     public class TimelineCreator : MonoBehaviour
     {

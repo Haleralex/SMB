@@ -4,19 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Test
+namespace ARQTimeline
 {
-    public class ARQTimeline : ScriptableObject, ISerializationCallbackReceiver
+    public class Timeline
     {
         #region Fields
-        private List<ARQTimelineTrack> _listARQTimelineTrack = new List<ARQTimelineTrack>();
+        private List<TimelineTrack> _listARQTimelineTrack = new List<TimelineTrack>();
         
 
         public float duration { 
             get 
             {
                 float maxDur = 0.0f;
-                foreach(ARQTimelineTrack timelineTrack in _listARQTimelineTrack)
+                foreach(TimelineTrack timelineTrack in _listARQTimelineTrack)
                 {
                     if (timelineTrack.maxEndTime > maxDur)
                         maxDur = timelineTrack.maxEndTime;
@@ -25,7 +25,7 @@ namespace Test
             }
         }
 
-        public event Action<ARQTimeline, float> TimeWasChanged;
+        public event Action<Timeline, float> TimeWasChanged;
 
         public bool _isPaused = false;
         public bool _isStarted = false;
@@ -45,18 +45,18 @@ namespace Test
 
 
         #region Methods
-        public T CreateTrack<T>() where T : ARQTimelineTrack
+        public T CreateTrack<T>() where T : TimelineTrack, new()
         {
-            T addedTrack = CreateInstance<T>();
+            T addedTrack = new T();
             AddTrack(addedTrack);
             addedTrack.BindTimeline(this);
             return addedTrack;
         }
-        private void AddTrack<T>(T addedTrack) where T : ARQTimelineTrack
+        private void AddTrack<T>(T addedTrack) where T : TimelineTrack
         {
             _listARQTimelineTrack.Add(addedTrack);
         }
-        public bool DeleteTrack(ARQTimelineTrack track)
+        public bool DeleteTrack(TimelineTrack track)
         {
             if (_listARQTimelineTrack.Contains(track))
             {
@@ -69,21 +69,12 @@ namespace Test
         public void Rewind(float time)
         {
             Time = time;
-            foreach (ARQTimelineTrack timelineTrack in _listARQTimelineTrack)
+            foreach (TimelineTrack timelineTrack in _listARQTimelineTrack)
             {
                 timelineTrack.Rewind(time);
             }
         }
 
-        public void OnAfterDeserialize()
-        {
-
-        }
-
-        public void OnBeforeSerialize()
-        {
-
-        }
         #endregion
 
     }

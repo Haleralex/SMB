@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Test
+namespace ARQTimeline
 {
-    public class ARQTimelineAnimationClip : ARQTimelineClip
+    public class TimelineAnimationClip : TimelineClip
     {
         private AnimationClip _animationClip;
         public AnimationClip AnimationClip 
@@ -17,8 +17,9 @@ namespace Test
                 _animationClip = value; 
             } 
         }
-        public override void Play(Animation animation, float time)
+        public override void Play<T>(T director, float time)
         {
+            Animation animation = director as Animation;
             animation[_animationClip.name].wrapMode = WrapMode.Clamp;
             animation[_animationClip.name].blendMode = AnimationBlendMode.Blend;
             animation.Blend(_animationClip.name);
@@ -26,8 +27,9 @@ namespace Test
             animation[_animationClip.name].speed = 1;
         }
 
-        public override void Rewind(Animation animation, float time)
+        public override void Rewind<T>(T director, float time)
         {
+            Animation animation = director as Animation;
             animation.Stop();
             animation.Blend(_animationClip.name);
             animation[_animationClip.name].time = time - _startTime;

@@ -7,7 +7,7 @@ public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB where TMonoBehaviour : M
     public string _nameBehaviour = "";
 
     [SerializeField]
-    private protected List<Test.Transition> Transitions;
+    private protected List<ARQTimeline.Transition> Transitions;
 
     protected TMonoBehaviour m_MonoBehaviour;
     private bool m_FirstFrameHappened;

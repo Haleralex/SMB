@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Test
+namespace ARQTimeline
 {
     public class TimeLineDirector : MonoBehaviour
     {
