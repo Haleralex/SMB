@@ -55,5 +55,10 @@ namespace ARQTimeline
             audioSource[_animationClip.name].time = time - _startTime;
             audioSource[_animationClip.name].speed = 0;*/
         }
+
+        public override void SetInstance<T>(T instance)
+        {
+            _audioSource = instance as AudioSource;
+        }
     }
 }

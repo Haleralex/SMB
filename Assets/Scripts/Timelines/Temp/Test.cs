@@ -20,14 +20,10 @@ namespace ARQTimeline{
             animationClip2.legacy = true;
             animation.AddClip(animationClip1, animationClip1.name);
             animation.AddClip(animationClip2, animationClip2.name);
-            var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack>();
+            var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack, Animation>(animation);
 
-
-            arqTimelineAnimationTrack.Animation = animation;
-            var timelineClip = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip>(2, 1);
-            var timelineClipExtra = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip>(2.5f, 1);
-            timelineClip.AnimationClip = animationClip1;
-            timelineClipExtra.AnimationClip = animationClip2;
+            var timelineClip = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2, 1, animationClip1);
+            var timelineClipExtra = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2.5f, 1, animationClip2);
             return _arqTimeline;
         }
         [SerializeField]
@@ -52,20 +48,16 @@ namespace ARQTimeline{
             animation2.AddClip(animationClip11, animationClip11.name);
             animation2.AddClip(animationClip12, animationClip12.name);
 
-            var arqTimelineAudioTrack = _arqTimeline.CreateTrack<TimelineAudioTrack>();
-            var arqAudioClip1 = arqTimelineAudioTrack.CreateClip<TimelineAudioClip>(1, 1);
-            arqAudioClip1.AudioSource = audioSource1;
+            var arqTimelineAudioTrack = _arqTimeline.CreateTrack<TimelineAudioTrack, GameObject>(gameObject); //не так
+
+            var arqAudioClip1 = arqTimelineAudioTrack.CreateClip<TimelineAudioClip, AudioSource>(1, 1, audioSource1);
             arqAudioClip1.AudioClip = audioClip1;
-            var arqAudioClip2 = arqTimelineAudioTrack.CreateClip<TimelineAudioClip>(2, 1);
-            arqAudioClip2.AudioSource = audioSource2;
+            var arqAudioClip2 = arqTimelineAudioTrack.CreateClip<TimelineAudioClip, AudioSource>(2, 1, audioSource2);
             arqAudioClip2.AudioClip = audioClip2;
 
-            var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack>();
-            arqTimelineAnimationTrack.Animation = animation2;
-            var timelineClip2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip>(1, 21.25f);
-            var timelineClipIdle = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip>(1, 4f);
-            timelineClip2.AnimationClip = animationClip11;
-            timelineClipIdle.AnimationClip = animationClip12;
+            var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack,Animation>(animation2);
+            var timelineClip2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, 21.25f, animationClip11);
+            var timelineClipIdle = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, 4f, animationClip12);
             return _arqTimeline;
         }
 
@@ -79,6 +71,37 @@ namespace ARQTimeline{
             _stateMachine.CreateState("HalfParts", Create2Timeline(), new List<Transition>() { new Transition(KeyCode.B, "Half") }, false);
 
         }
+
+        /* аттрибуты state 
+         * 1)имя
+         * 2)таймлайн
+         * 3)пути из state (transition)
+         * 4)является ли state стартовым
+         * 
+         * аттрибуты таймлайна 
+         * 1)имя
+         * 2)длительность
+         * 3)список трэков
+         * 4)мод (очередь или обычная)
+         * 
+         * атрибуты трэка(абстрактного)
+         * 1)список клипов
+         * 
+         * атрибуты клипа(абстарктного)
+         * 1)старт тайм
+         * 2)энд тайм
+         * 3)длительность
+         * 
+         * аттрибуты трэка(анимации)
+         * 1)animation
+         * 2)последняя активное время трэка (типо последний момент у трэка)
+         * 
+         * аттрибуты трэка(аудио)
+         * 1)audioSource
+         * 
+         */
+
+
 
         public void TestStartStateMachine()
         {

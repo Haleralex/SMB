@@ -36,5 +36,10 @@ namespace ARQTimeline
             animation[_animationClip.name].speed = 0;
         }
 
+        public override void SetInstance<T>(T instance)
+        {
+            _animationClip = instance as AnimationClip;
+        }
+
     }
 }

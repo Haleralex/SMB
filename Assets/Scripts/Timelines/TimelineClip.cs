@@ -31,5 +31,10 @@ namespace ARQTimeline
         {
             
         }
+
+        public virtual void SetInstance<T>(T instance)
+        {
+
+        }
     }
 }

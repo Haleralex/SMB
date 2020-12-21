@@ -45,10 +45,11 @@ namespace ARQTimeline
 
 
         #region Methods
-        public T CreateTrack<T>() where T : TimelineTrack, new()
+        public T CreateTrack<T,P>(P director) where T : TimelineTrack, new()
         {
             T addedTrack = new T();
             AddTrack(addedTrack);
+            addedTrack.SetDirector(director);
             addedTrack.BindTimeline(this);
             return addedTrack;
         }

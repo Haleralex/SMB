@@ -24,8 +24,14 @@ namespace ARQTimeline
             } 
         }
 
-        public T CreateClip<T>(float start, float duration) where T: TimelineClip, new(){
+        public virtual void SetDirector<T>(T director)
+        {
+
+        }
+
+        public T CreateClip<T, P>(float start, float duration, P instance) where T: TimelineClip, new(){
             T addedClip = CreateDefaultClip<T>();
+            addedClip.SetInstance(instance);
             addedClip._startTime = start;
             addedClip._duration = duration;
             AddClip(addedClip);

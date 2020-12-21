@@ -55,5 +55,9 @@ namespace ARQTimeline
                 }
             }
         }
+        public override void SetDirector<T>(T director)
+        {
+
+        }
     }
 }
