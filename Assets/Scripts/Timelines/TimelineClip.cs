@@ -16,23 +16,27 @@ namespace ARQTimeline
             get{
                 return _endTime-_startTime;
                 } 
-            set{
-                _endTime = _startTime+value;
-            }
-        }
-
-        public Object asset { get; set; }
-
-        public virtual void Play<T>(T director, float time)
-        {
-            
-        }
-        public virtual void Rewind<T>(T director, float time)
-        {
             
         }
 
-        public virtual void SetInstance<T>(T instance)
+
+        public virtual void Play<T>(T player, float time)
+        {
+            
+        }
+        public virtual void Play(float time)
+        {
+
+        }
+        public virtual void Rewind<T>(T player, float time)
+        {
+            
+        }
+        public virtual void Rewind(float time)
+        {
+
+        }
+        public virtual void SetInstance<T>(T clipInstance)
         {
 
         }

@@ -16,14 +16,9 @@ namespace ARQTimeline{
         private Timeline Create1Timeline()
         {
             var _arqTimeline = new Timeline();
-            animationClip1.legacy = true;
-            animationClip2.legacy = true;
-            animation.AddClip(animationClip1, animationClip1.name);
-            animation.AddClip(animationClip2, animationClip2.name);
             var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack, Animation>(animation);
-
-            var timelineClip = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2, 1, animationClip1);
-            var timelineClipExtra = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2.5f, 1, animationClip2);
+            var timelineClip = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2, animationClip1.length, animationClip1);
+            var timelineClipExtra = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2.5f, animationClip2.length, animationClip2);
             return _arqTimeline;
         }
         [SerializeField]
@@ -43,21 +38,14 @@ namespace ARQTimeline{
         private Timeline Create2Timeline()
         {
             var _arqTimeline = new Timeline();
-            animationClip11.legacy = true;
-            animationClip12.legacy = true;
-            animation2.AddClip(animationClip11, animationClip11.name);
-            animation2.AddClip(animationClip12, animationClip12.name);
-
-            var arqTimelineAudioTrack = _arqTimeline.CreateTrack<TimelineAudioTrack, GameObject>(gameObject); //не так
-
-            var arqAudioClip1 = arqTimelineAudioTrack.CreateClip<TimelineAudioClip, AudioSource>(1, 1, audioSource1);
+            var arqTimelineAudioTrack = _arqTimeline.CreateTrack<TimelineAudioTrack>();
+            var arqAudioClip1 = arqTimelineAudioTrack.CreateClip<TimelineAudioClip, AudioSource>(1, audioClip1.length, audioSource1);
             arqAudioClip1.AudioClip = audioClip1;
-            var arqAudioClip2 = arqTimelineAudioTrack.CreateClip<TimelineAudioClip, AudioSource>(2, 1, audioSource2);
+            var arqAudioClip2 = arqTimelineAudioTrack.CreateClip<TimelineAudioClip, AudioSource>(2, audioClip2.length, audioSource2);
             arqAudioClip2.AudioClip = audioClip2;
-
             var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack,Animation>(animation2);
-            var timelineClip2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, 21.25f, animationClip11);
-            var timelineClipIdle = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, 4f, animationClip12);
+            var timelineClip2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, animationClip11.length, animationClip11);
+            var timelineClipIdle = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, animationClip12.length, animationClip12);
             return _arqTimeline;
         }
 
@@ -109,4 +97,6 @@ namespace ARQTimeline{
         }
     }
 }
-
+/*
+ ui slider
+*/

@@ -30,7 +30,6 @@ namespace ARQTimeline
         public override void Rewind<T>(T director, float time)
         {
             Animation animation = director as Animation;
-            animation.Stop();
             animation.Blend(_animationClip.name);
             animation[_animationClip.name].time = time - _startTime;
             animation[_animationClip.name].speed = 0;

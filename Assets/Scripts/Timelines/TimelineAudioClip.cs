@@ -30,30 +30,21 @@ namespace ARQTimeline
                 _audioClip = value;
             }
         }
-        public override void Play<T>(T director, float time)
+        public override void Play(float time)
         {
-
             _audioSource.clip = _audioClip;
             _audioSource.time = time - _startTime;
             _audioSource.Play();
-            /*audioSource.clip
-            audioSource.Play()
-            audioSource[_audioClip.name].wrapMode = WrapMode.Clamp;
-            audioSource[_animationClip.name].blendMode = AnimationBlendMode.Blend;
-            audioSource.Blend(_animationClip.name);
-            audioSource[_animationClip.name].time = time - _startTime;
-            audioSource[_animationClip.name].speed = 1;*/
         }
 
-        public override void Rewind<T>(T director, float time)
+        public override void Rewind(float time)
         {
-            _audioSource.Stop();
             _audioSource.clip = _audioClip;
-            _audioSource.time = time - _startTime;
-            /*audioSource.Stop();
-            audioSource.Blend(_animationClip.name);
-            audioSource[_animationClip.name].time = time - _startTime;
-            audioSource[_animationClip.name].speed = 0;*/
+            if(time - _startTime > _endTime)
+                _audioSource.time = _duration;
+            else
+                _audioSource.time = time - _startTime;
+            _audioSource.Pause();
         }
 
         public override void SetInstance<T>(T instance)

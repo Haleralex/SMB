@@ -2,32 +2,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ARQTimeline;
 
 namespace ARQStateMachine
 {
     public class State
     {
         public event Action StateEntered;
-        public event Action StateExited;
 
-        public List<ARQTimeline.Transition> _listTransitions = new List<ARQTimeline.Transition>();
-        public ARQTimeline.Timeline timeline;
-        public event Action<State, string> NodeComplete;
+        public List<Transition> _listTransitions = new List<Transition>();
+        public readonly Timeline timeline;
+        public event Action<State> NodeComplete;
+        public event Action<string> SuccessCheck;
 
         private bool _isStarted = false;
-        private bool _isCompleted = false;
+        public bool _isCompleted = false;
 
         public bool _isStart = false;
 
         public readonly string _nodeName = " ";
 
         
-        public State(string nodeName, ARQTimeline.Timeline timeline, List<ARQTimeline.Transition> listTransitions, bool isStart)
+        public State(string nodeName, Timeline timeline, List<Transition> listTransitions, bool isStart)
         {
             _isStart = isStart;
             _nodeName = nodeName;
             this.timeline = timeline;
             _listTransitions = listTransitions;
+            timeline.TimelineFinished += OnTimelineFinished;
+        }
+
+        public void OnTimelineFinished()
+        {
+            _isCompleted = true;
+            NodeComplete?.Invoke(this);
         }
 
         public State()
@@ -36,13 +44,14 @@ namespace ARQStateMachine
             _nodeName = " ";
             timeline = null;
             _listTransitions = new List<ARQTimeline.Transition>();
+
         }
 
         public void Tick()
         {
-            if (!_isStarted || _isCompleted)
+            if (!_isStarted)
                 return;
-
+            
             OnUpdate();
         }
 
@@ -51,7 +60,6 @@ namespace ARQStateMachine
 
         public void StartNode()
         {
-            
             _isCompleted = false;
             _isStarted = true;
             OnEnter();
@@ -64,10 +72,17 @@ namespace ARQStateMachine
             string next = GoNext();
             if (next == null)
                 return;
-            _isCompleted = true;
-            _isStarted = false;
-            NodeComplete?.Invoke(this, next);
-            OnExit();
+            SuccessCheck?.Invoke(next);
+        }
+
+        internal void UnpackState()
+        {
+            timeline.UnpackTracks();
+        }
+
+        internal void PackState()
+        {
+            timeline.PackTracks();
         }
 
         protected string GoNext()
@@ -90,9 +105,11 @@ namespace ARQStateMachine
         {
             StateEntered?.Invoke();
         }
-        protected void OnExit()
+
+        public void OnExit()
         {
-            StateExited?.Invoke();
+            _isCompleted = true;
+            _isStarted = false;
         }
     }
 }

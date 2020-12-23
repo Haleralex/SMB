@@ -11,7 +11,7 @@ namespace ARQTimeline
             {
                 if (arqTimelineClip._startTime <= time && arqTimelineClip._endTime >= time && !arqTimelineClip.wasStarted)
                 {
-                    (arqTimelineClip as TimelineAudioClip).Play(new AudioSource(), time);
+                    (arqTimelineClip as TimelineAudioClip).Play(time);
                     arqTimelineClip.wasStarted = true;
                 }
             }
@@ -23,13 +23,19 @@ namespace ARQTimeline
             {
                 if (time >= arqTimelineClip._startTime && time <= arqTimelineClip._endTime)
                 {
-                    (arqTimelineClip as TimelineAudioClip).Rewind(new AudioSource(), time);
+                    (arqTimelineClip as TimelineAudioClip).Rewind(time);
                     arqTimelineClip.wasStarted = false;
                     wasRewind = true;
                 }
                 if (time < arqTimelineClip._startTime)
                 {
                     arqTimelineClip.wasStarted = false;
+                    (arqTimelineClip as TimelineAudioClip).AudioSource.Stop();
+                }
+                if (time > arqTimelineClip._endTime)
+                {
+                    (arqTimelineClip as TimelineAudioClip).AudioSource.Stop();
+                    arqTimelineClip.wasStarted = true;
                 }
             }
 
@@ -45,17 +51,17 @@ namespace ARQTimeline
                 }
                 if (time > _listARQTimelineClips[0]._endTime)
                 {
-                    (lastClip as TimelineAudioClip).Rewind(new AudioSource(), lastClip._endTime);
+                    (lastClip as TimelineAudioClip).AudioSource.Stop();
                     lastClip.wasStarted = false;
                 }
                 else
                 {
-                    (_listARQTimelineClips[0] as TimelineAudioClip).Rewind(new AudioSource(), _listARQTimelineClips[0]._startTime);
+                    (_listARQTimelineClips[0] as TimelineAudioClip).Rewind(_listARQTimelineClips[0]._startTime);
                     _listARQTimelineClips[0].wasStarted = false;
                 }
             }
         }
-        public override void SetDirector<T>(T director)
+        public override void SetPlayer<T>(T director)
         {
 
         }

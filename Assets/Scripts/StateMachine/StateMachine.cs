@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using ARQTimeline;
+using System;
+
 namespace ARQStateMachine
 {
     public class StateMachine : MonoBehaviour
@@ -11,8 +13,6 @@ namespace ARQStateMachine
         private TimelineDirector _arqTimelineDirector;
 
         private List<State> _listAllStates = new List<State>();
-
-        private Queue<Timeline> _queueARQTimelines = new Queue<Timeline>();
 
         private State _currentState;
 
@@ -31,14 +31,15 @@ namespace ARQStateMachine
             _currentState?.Tick();
         }
 
-        public void CreateState(string stateName, ARQTimeline.Timeline timeline = null, List<Transition> listTransitions = null, bool isStart = false)
+        public void CreateState(string stateName, Timeline timeline = null, List<Transition> listTransitions = null, bool isStart = false)
         {
             while(_listAllStates.Where(a => a._nodeName == stateName).ToList().Count > 0) // чтобы с одним именем не было
             {
                 stateName += "1";
             }
             State state = new State(stateName, timeline, listTransitions, isStart);
-            state.StateEntered += () => StartState(state);
+            state.StateEntered += () => { PackState(state); StartState(state);  };
+            state.SuccessCheck += FindNextState;
             _listAllStates.Add(state);
             if (isStart)
             {
@@ -47,13 +48,58 @@ namespace ARQStateMachine
             }
         }
 
-        private void OnNodeComplete(State completed, string next)
+        private void PackState(State state)
+        {
+            state.PackState();
+        }
+        private void UnpackState(State state)
+        {
+            state.UnpackState();
+        }
+
+        private void FindNextState(string next)
+        {
+            State nextState = _listAllStates.Where(a => a._nodeName == next).FirstOrDefault();
+
+            if (_currentState._isCompleted)
+            {
+                _currentState.OnExit();
+                _currentState.NodeComplete -= OnNodeComplete;
+                nextState.NodeComplete += OnNodeComplete;
+                _currentState = nextState;
+                _currentState.StartNode();
+            }
+            else
+            {
+                if (QueueMod)
+                {
+                    _arqTimelineDirector.Finished = () =>
+                    {
+                        _currentState.OnExit();
+                        _currentState.NodeComplete -= OnNodeComplete;
+                        nextState.NodeComplete += OnNodeComplete;
+                        _currentState = nextState;
+                        _currentState.StartNode();
+                    };
+                }
+                else
+                {
+                    _currentState.OnTimelineFinished();
+                    _currentState.OnExit();
+                    _currentState.NodeComplete -= OnNodeComplete;
+                    nextState.NodeComplete += OnNodeComplete;
+                    _currentState = nextState;
+                    _currentState.StartNode();
+                }
+            }
+        }
+        private void NodeComplete(State completed)
         {
             completed.NodeComplete -= OnNodeComplete;
-            State nextState = _listAllStates.Where(a => a._nodeName == next).FirstOrDefault();
-            nextState.NodeComplete += OnNodeComplete;
-            _currentState = nextState;
-            _currentState.StartNode();
+        }
+        private void OnNodeComplete(State completed)
+        {
+            NodeComplete(completed);
         }
 
         public void StartState(State state)
@@ -63,35 +109,9 @@ namespace ARQStateMachine
             if (timeline == null)
                 return;
 
-            if (QueueMod)
-            {
-                if (_arqTimelineDirector.ARQTimeline == null || !_arqTimelineDirector.ARQTimeline._isStarted)
-                {
-                    _arqTimelineDirector.ARQTimeline = timeline;
-                    _arqTimelineDirector.Play();
-                }
-                else
-                {
-                    _queueARQTimelines.Enqueue(timeline);
-                    _arqTimelineDirector.Finished = PlayFromQueue;
-                }
-            }
-            else
-            {
-                _arqTimelineDirector.Stop();
-                _arqTimelineDirector.ARQTimeline = timeline;
-                _arqTimelineDirector.Play();
-            }
+            _arqTimelineDirector.Stop();
+            _arqTimelineDirector.ARQTimeline = timeline;
+            _arqTimelineDirector.Play();
         }
-
-        void PlayFromQueue()
-        {
-            if (_queueARQTimelines.Count > 0)
-            {
-                _arqTimelineDirector.ARQTimeline = _queueARQTimelines.Dequeue();
-                _arqTimelineDirector.Play();
-            }
-        }
-
     }
 }

@@ -24,16 +24,16 @@ namespace ARQTimeline
             } 
         }
 
-        public virtual void SetDirector<T>(T director)
+        public virtual void SetPlayer<T>(T player) 
         {
 
         }
 
-        public T CreateClip<T, P>(float start, float duration, P instance) where T: TimelineClip, new(){
+        public T CreateClip<T, P>(float start, float duration, P clipInstance) where T: TimelineClip, new(){
             T addedClip = CreateDefaultClip<T>();
-            addedClip.SetInstance(instance);
+            addedClip.SetInstance(clipInstance);
             addedClip._startTime = start;
-            addedClip._duration = duration;
+            addedClip._endTime = start+duration;
             AddClip(addedClip);
             return addedClip;
         }
@@ -70,6 +70,16 @@ namespace ARQTimeline
         public virtual void Rewind(float time)
         {
 
+        }
+
+        public virtual void PackClips()
+        {
+            
+        }
+
+        public virtual void UnpackClips()
+        {
+            
         }
     }
 }

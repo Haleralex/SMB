@@ -82,6 +82,7 @@ namespace ARQTimeline
             }
             _arqTimeline._isStarted = false;
             Finished?.Invoke();
+            _arqTimeline.FinishTimeline();
         }
     }
 }

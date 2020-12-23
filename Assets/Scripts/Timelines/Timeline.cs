@@ -10,7 +10,8 @@ namespace ARQTimeline
     {
         #region Fields
         private List<TimelineTrack> _listARQTimelineTrack = new List<TimelineTrack>();
-        
+
+        public event Action TimelineFinished;
 
         public float duration { 
             get 
@@ -36,7 +37,7 @@ namespace ARQTimeline
             get { return time; }
             set
             {
-                TimeWasChanged(this, time); 
+                TimeWasChanged(this, time);
                 time = value;
             }
         }
@@ -45,11 +46,19 @@ namespace ARQTimeline
 
 
         #region Methods
-        public T CreateTrack<T,P>(P director) where T : TimelineTrack, new()
+        public T CreateTrack<T>() where T : TimelineTrack, new()
         {
             T addedTrack = new T();
             AddTrack(addedTrack);
-            addedTrack.SetDirector(director);
+            
+            addedTrack.BindTimeline(this);
+            return addedTrack;
+        }
+        public T CreateTrack<T,P>(P player) where T : TimelineTrack, new()
+        {
+            T addedTrack = new T();
+            AddTrack(addedTrack);
+            addedTrack.SetPlayer(player);
             addedTrack.BindTimeline(this);
             return addedTrack;
         }
@@ -67,6 +76,22 @@ namespace ARQTimeline
             return false;
         }
 
+        internal void PackTracks()
+        {
+            foreach(var k in _listARQTimelineTrack)
+            {
+                k.PackClips();
+            }
+        }
+
+        internal void UnpackTracks()
+        {
+            foreach (var k in _listARQTimelineTrack)
+            {
+                k.UnpackClips();
+            }
+        }
+
         public void Rewind(float time)
         {
             Time = time;
@@ -74,6 +99,11 @@ namespace ARQTimeline
             {
                 timelineTrack.Rewind(time);
             }
+        }
+
+        internal void FinishTimeline()
+        {
+            TimelineFinished?.Invoke();
         }
 
         #endregion
