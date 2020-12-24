@@ -6,7 +6,7 @@ namespace ARQTimeline
     public class TimelineAudioTrack : TimelineTrack
     {
        public override void CheckTime(float time)
-        {
+       {
             foreach (TimelineClip arqTimelineClip in _listARQTimelineClips)
             {
                 if (arqTimelineClip._startTime <= time && arqTimelineClip._endTime >= time && !arqTimelineClip.wasStarted)
@@ -15,7 +15,7 @@ namespace ARQTimeline
                     arqTimelineClip.wasStarted = true;
                 }
             }
-        }
+       }
         public override void Rewind(float time)
         {
             var wasRewind = false;
@@ -63,7 +63,7 @@ namespace ARQTimeline
         }
         public override void SetPlayer<T>(T director)
         {
-
+        
         }
     }
 }

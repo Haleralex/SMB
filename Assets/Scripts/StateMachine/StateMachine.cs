@@ -66,6 +66,7 @@ namespace ARQStateMachine
                 _currentState.OnExit();
                 _currentState.NodeComplete -= OnNodeComplete;
                 nextState.NodeComplete += OnNodeComplete;
+                UnpackState(_currentState);
                 _currentState = nextState;
                 _currentState.StartNode();
             }
@@ -78,6 +79,7 @@ namespace ARQStateMachine
                         _currentState.OnExit();
                         _currentState.NodeComplete -= OnNodeComplete;
                         nextState.NodeComplete += OnNodeComplete;
+                        UnpackState(_currentState);
                         _currentState = nextState;
                         _currentState.StartNode();
                     };
@@ -88,6 +90,7 @@ namespace ARQStateMachine
                     _currentState.OnExit();
                     _currentState.NodeComplete -= OnNodeComplete;
                     nextState.NodeComplete += OnNodeComplete;
+                    UnpackState(_currentState);
                     _currentState = nextState;
                     _currentState.StartNode();
                 }
@@ -109,7 +112,7 @@ namespace ARQStateMachine
             if (timeline == null)
                 return;
 
-            _arqTimelineDirector.Stop();
+            //_arqTimelineDirector.Stop();
             _arqTimelineDirector.ARQTimeline = timeline;
             _arqTimelineDirector.Play();
         }

@@ -9,13 +9,11 @@ namespace ARQTimeline
 {
     public class TimelineDirector : MonoBehaviour
     {
-        [SerializeField]
-        private Slider slider;
-
         private static readonly WaitForEndOfFrame _frameWait = new WaitForEndOfFrame();
         public event Action<TimelineDirector> Stopped;
         public event Action<TimelineDirector> Played;
         public event Action<TimelineDirector> Paused;
+        public event Action<TimelineDirector> Updated;
         public Action Finished = delegate { };
         private Timeline _arqTimeline;
         public Timeline ARQTimeline { 
@@ -35,7 +33,7 @@ namespace ARQTimeline
             if (!_arqTimeline._isStarted)
             {
                 StartCoroutine(PlayCoroutine());
-                Played?.Invoke(this);
+                
             }
             else
             {
@@ -65,18 +63,18 @@ namespace ARQTimeline
 
         private IEnumerator PlayCoroutine()
         {
-            slider.value = 0;
-            slider.maxValue = _arqTimeline.duration;
-            slider.onValueChanged.AddListener((value) => _arqTimeline.Rewind(value));
+
+            Played?.Invoke(this);
+
+            //slider.value = 0;
+            
             _arqTimeline._isStarted = true;
-            _arqTimeline.Rewind(slider.value);
             while (_arqTimeline.Time< _arqTimeline.duration || _arqTimeline._isPaused)
             {
                 if (!_arqTimeline._isPaused)
                 {
                     _arqTimeline.Time += Time.deltaTime;
-                    
-                    slider?.SetValueWithoutNotify(_arqTimeline.Time);
+                    Updated?.Invoke(this);
                 }
                 yield return _frameWait;
             }
