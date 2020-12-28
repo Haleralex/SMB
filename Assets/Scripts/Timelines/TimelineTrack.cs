@@ -9,7 +9,7 @@ namespace ARQTimeline
     {
         public readonly List<TimelineClip> _listARQTimelineClips = new List<TimelineClip>();
 
-        public float maxEndTime { 
+        public float MaxEndTime { 
             get
             {
                 float maxTime = 0.0f;
@@ -57,7 +57,7 @@ namespace ARQTimeline
 
         private void ARQTimeline_TimeWasChanged(Timeline timeline, float time)
         {
-            if (timeline._isStarted && !timeline._isPaused)
+            if (timeline.IsStarted && !timeline.IsPaused)
                 CheckTime(time);
             else
                 Rewind(time);

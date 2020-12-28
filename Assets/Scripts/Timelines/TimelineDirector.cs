@@ -25,12 +25,12 @@ namespace ARQTimeline
             {
                 StopAllCoroutines();
                 _arqTimeline = value;
-                _arqTimeline._isStarted = false;
+                _arqTimeline.IsStarted = false;
             } 
         }
 
         public void Play() {
-            if (!_arqTimeline._isStarted)
+            if (!_arqTimeline.IsStarted)
             {
                 StartCoroutine(PlayCoroutine());
                 
@@ -42,20 +42,20 @@ namespace ARQTimeline
         }
 
         public void Pause(){
-            _arqTimeline._isPaused = true;
+            _arqTimeline.IsPaused = true;
             _arqTimeline.Rewind(_arqTimeline.Time);
             Paused?.Invoke(this);
         }
 
         public void Resume(){
-            _arqTimeline._isPaused = false;
+            _arqTimeline.IsPaused = false;
         }
 
         public void Stop(){
             StopAllCoroutines();
             if (_arqTimeline != null)
             {
-                _arqTimeline._isStarted = false;
+                _arqTimeline.IsStarted = false;
                 _arqTimeline.Rewind(_arqTimeline.Time);
             }
             Stopped?.Invoke(this);
@@ -68,17 +68,17 @@ namespace ARQTimeline
 
             //slider.value = 0;
             
-            _arqTimeline._isStarted = true;
-            while (_arqTimeline.Time< _arqTimeline.duration || _arqTimeline._isPaused)
+            _arqTimeline.IsStarted = true;
+            while (_arqTimeline.Time< _arqTimeline.Duration || _arqTimeline.IsPaused)
             {
-                if (!_arqTimeline._isPaused)
+                if (!_arqTimeline.IsPaused)
                 {
                     _arqTimeline.Time += Time.deltaTime;
                     Updated?.Invoke(this);
                 }
                 yield return _frameWait;
             }
-            _arqTimeline._isStarted = false;
+            _arqTimeline.IsStarted = false;
             Finished?.Invoke();
             _arqTimeline.FinishTimeline();
         }

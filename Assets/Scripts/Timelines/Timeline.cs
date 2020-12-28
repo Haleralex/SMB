@@ -9,40 +9,40 @@ namespace ARQTimeline
     public class Timeline
     {
         #region Fields
-        private List<TimelineTrack> _listARQTimelineTrack = new List<TimelineTrack>();
+        private readonly List<TimelineTrack> _listARQTimelineTrack = new List<TimelineTrack>();
 
-        public event Action TimelineFinished;
 
-        public float duration { 
+        public float Duration { 
             get 
             {
                 float maxDur = 0.0f;
                 foreach(TimelineTrack timelineTrack in _listARQTimelineTrack)
                 {
-                    if (timelineTrack.maxEndTime > maxDur)
-                        maxDur = timelineTrack.maxEndTime;
+                    if (timelineTrack.MaxEndTime > maxDur)
+                        maxDur = timelineTrack.MaxEndTime;
                 }
                 return maxDur;
             }
         }
 
-        public event Action<Timeline, float> TimeWasChanged;
 
-        public bool _isPaused = false;
-        public bool _isStarted = false;
+        public bool IsPaused = false;
+        public bool IsStarted = false;
 
-        private float time = 0;
+        private float _time = 0;
         public float Time
         {
-            get { return time; }
+            get { return _time; }
             set
             {
-                TimeWasChanged(this, time);
-                time = value;
+                TimeWasChanged(this, _time);
+                _time = value;
             }
         }
         #endregion
 
+        public event Action<Timeline, float> TimeWasChanged;
+        public event Action TimelineFinished;
 
 
         #region Methods

@@ -22,7 +22,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 0
+    m_Start: 3.1
     m_ClipIn: 0
     m_Asset: {fileID: -2168680648945833030}
     m_Duration: 5.59
@@ -30,7 +30,7 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -9042948024205304370}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 3.99
+    m_BlendInDuration: 2.023333333333333
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -91,7 +91,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: IstochnikObnaruzhen
   - m_Version: 1
-    m_Start: 0
+    m_Start: 1.1333333333333333
     m_ClipIn: 0
     m_Asset: {fileID: 4962645002986720825}
     m_Duration: 3.99
@@ -100,7 +100,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 3.99
+    m_BlendOutDuration: 2.023333333333333
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
