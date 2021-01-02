@@ -19,6 +19,7 @@ namespace ARQTimeline{
             var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack, Animation>(animation);
             var timelineClip = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2, animationClip1.length, animationClip1);
             var timelineClipExtra = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2.5f, animationClip2.length, animationClip2);
+            Debug.Log(arqTimelineAnimationTrack.MaxEndTime);
             return _arqTimeline;
         }
         [SerializeField]
@@ -46,6 +47,7 @@ namespace ARQTimeline{
             var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack,Animation>(animation2);
             var timelineClip2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, animationClip11.length, animationClip11);
             var timelineClipIdle = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, animationClip12.length, animationClip12);
+            Debug.Log(arqTimelineAnimationTrack.MaxEndTime);
             return _arqTimeline;
         }
 

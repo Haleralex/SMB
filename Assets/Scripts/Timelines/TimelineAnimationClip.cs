@@ -33,6 +33,7 @@ namespace ARQTimeline
             animation.Blend(_animationClip.name);
             animation[_animationClip.name].time = time - _startTime;
             animation[_animationClip.name].speed = 0;
+            animation.Sample();
         }
 
         public override void SetInstance<T>(T instance)

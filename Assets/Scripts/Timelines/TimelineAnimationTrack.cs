@@ -42,18 +42,20 @@ namespace ARQTimeline
                     arqTimelineClip.wasStarted = false;
                     wasRewind = true;
                 }
-                if (time < arqTimelineClip._startTime)
+                else if (time < arqTimelineClip._startTime)
                 {
                     _animation[(arqTimelineClip as TimelineAnimationClip).AnimationClip.name].speed = 0;
                     arqTimelineClip.wasStarted = false;
                 }
-                if (time > arqTimelineClip._endTime)
+                else if (time > arqTimelineClip._endTime)
                 {
-                    (arqTimelineClip as TimelineAnimationClip).Rewind(_animation, arqTimelineClip._endTime);
+                    _animation[(arqTimelineClip as TimelineAnimationClip).AnimationClip.name].speed = 0;
+                    //(arqTimelineClip as TimelineAnimationClip).Rewind(_animation, arqTimelineClip._endTime);
                     arqTimelineClip.wasStarted = true;
+                    wasRewind = true;
                 }
             }
-            if (!wasRewind)
+            /*if (!wasRewind)
             {
                 TimelineClip lastClip = _listARQTimelineClips[0];
                 foreach(TimelineClip arqTimelineClip in _listARQTimelineClips)
@@ -76,7 +78,7 @@ namespace ARQTimeline
                     _animation[(_listARQTimelineClips[0] as TimelineAnimationClip).AnimationClip.name].speed = 0;
                     _listARQTimelineClips[0].wasStarted = false;
                 }
-            }
+            }*/
         }
         public override void SetPlayer<T>(T director)
         {
