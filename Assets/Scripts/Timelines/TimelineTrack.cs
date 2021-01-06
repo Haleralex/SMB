@@ -30,13 +30,16 @@ namespace ARQTimeline
         }
 
         public T CreateClip<T, P>(float start, float duration, P clipInstance) where T: TimelineClip, new(){
-            T addedClip = CreateDefaultClip<T>();
+            T addedClip = new T();
             addedClip.SetInstance(clipInstance);
             addedClip._startTime = start;
             addedClip._endTime = start+duration;
             AddClip(addedClip);
+
             return addedClip;
         }
+
+        
         public T CreateDefaultClip<T>() where T: TimelineClip, new()
         {
             T addedClip = new T();

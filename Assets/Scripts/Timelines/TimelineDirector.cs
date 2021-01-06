@@ -14,7 +14,8 @@ namespace ARQTimeline
         public event Action<TimelineDirector> Played;
         public event Action<TimelineDirector> Paused;
         public event Action<TimelineDirector> Updated;
-        public Action Finished = delegate { };
+        public Action DirectorFinished = delegate { };
+        
         private Timeline _arqTimeline;
         public Timeline ARQTimeline { 
             get 
@@ -66,8 +67,6 @@ namespace ARQTimeline
 
             Played?.Invoke(this);
 
-            //slider.value = 0;
-            
             _arqTimeline.IsStarted = true;
             while (_arqTimeline.Time< _arqTimeline.Duration || _arqTimeline.IsPaused)
             {
@@ -79,8 +78,8 @@ namespace ARQTimeline
                 yield return _frameWait;
             }
             _arqTimeline.IsStarted = false;
-            Finished?.Invoke();
-            _arqTimeline.FinishTimeline();
+            DirectorFinished?.Invoke();
+            _arqTimeline.TimelineIsFinished();
         }
     }
 }

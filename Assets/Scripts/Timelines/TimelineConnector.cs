@@ -8,13 +8,18 @@ namespace ARQTimeline
     {
         public TimelineDirector timelineDirector;
         public Slider slider;
-
+        
         public void OnEnable()
         {
             timelineDirector.Played += TimelineDirector_Played;
             timelineDirector.Updated += TimelineDirector_Updated;
+            slider.onValueChanged.AddListener((value) => timelineDirector.ARQTimeline.Rewind(value));
         }
-
+        public void OnDisable()
+        {
+            timelineDirector.Played -= TimelineDirector_Played;
+            timelineDirector.Updated -= TimelineDirector_Updated;
+        }
         private void TimelineDirector_Updated(TimelineDirector obj)
         {
             slider?.SetValueWithoutNotify(obj.ARQTimeline.Time);
@@ -24,7 +29,6 @@ namespace ARQTimeline
         {
             slider.value = 0;
             slider.maxValue = obj.ARQTimeline.Duration;
-            slider.onValueChanged.AddListener((value) => obj.ARQTimeline.Rewind(value));
             obj.ARQTimeline.Rewind(slider.value);
         }
 
@@ -35,6 +39,38 @@ namespace ARQTimeline
         public void TimelineDirectorResume()
         {
             timelineDirector.Resume();
+        }
+        public recording rec;
+        private void Update()
+        {
+            /*if (Input.GetKeyDown(KeyCode.K))
+            {
+
+                
+                StartCoroutine(Check());
+                rec.StartSex();
+            }
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                StartCoroutine(CheckR());
+            }*/
+        }
+
+        IEnumerator Check()
+        {
+            for(float i=0; i < 1.5f; i+=0.01f)
+            {
+                slider.value = i;
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+        IEnumerator CheckR()
+        {
+            for (float i = 1.5f; i >0.0f; i -= 0.01f)
+            {
+                slider.value = i;
+                yield return new WaitForSeconds(0.01f);
+            }
         }
     }
 }

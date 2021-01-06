@@ -13,13 +13,16 @@ namespace ARQTimeline{
         private AnimationClip animationClip1;
         [SerializeField]
         private AnimationClip animationClip2;
+        public Text text1;
+        public Text text2;
         private Timeline Create1Timeline()
         {
             var _arqTimeline = new Timeline();
             var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack, Animation>(animation);
-            var timelineClip = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2, animationClip1.length, animationClip1);
-            var timelineClipExtra = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2.5f, animationClip2.length, animationClip2);
-            Debug.Log(arqTimelineAnimationTrack.MaxEndTime);
+            var timelineClip = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(0.0f, animationClip1.length, animationClip1);
+            var timelineClipExtra = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(0.5f, animationClip2.length, animationClip2); 
+            //var timelineClipExtra2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1.5f, animationClip1.length, animationClip1);
+            _arqTimeline.text = text1;
             return _arqTimeline;
         }
         [SerializeField]
@@ -44,10 +47,12 @@ namespace ARQTimeline{
             arqAudioClip1.AudioClip = audioClip1;
             var arqAudioClip2 = arqTimelineAudioTrack.CreateClip<TimelineAudioClip, AudioSource>(2, audioClip2.length, audioSource2);
             arqAudioClip2.AudioClip = audioClip2;
+            
             var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack,Animation>(animation2);
             var timelineClip2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, animationClip11.length, animationClip11);
             var timelineClipIdle = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, animationClip12.length, animationClip12);
-            Debug.Log(arqTimelineAnimationTrack.MaxEndTime);
+            _arqTimeline.text = text2;
+
             return _arqTimeline;
         }
 
@@ -56,6 +61,7 @@ namespace ARQTimeline{
         private ARQStateMachine.StateMachine _stateMachine;
         public void CreateTestStates()
         {
+            
             _stateMachine.CreateState("Half", Create1Timeline(), new List<Transition>() { new Transition(KeyCode.A, "HalfParts") }, true);
             
             _stateMachine.CreateState("HalfParts", Create2Timeline(), new List<Transition>() { new Transition(KeyCode.B, "Half") }, false);

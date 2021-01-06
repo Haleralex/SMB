@@ -74,7 +74,7 @@ namespace ARQStateMachine
             {
                 if (QueueMod)
                 {
-                    _arqTimelineDirector.Finished = () =>
+                    _arqTimelineDirector.DirectorFinished = () =>
                     {
                         _currentState.OnExit();
                         _currentState.NodeComplete -= OnNodeComplete;
@@ -112,7 +112,6 @@ namespace ARQStateMachine
             if (timeline == null)
                 return;
 
-            //_arqTimelineDirector.Stop();
             _arqTimelineDirector.ARQTimeline = timeline;
             _arqTimelineDirector.Play();
         }

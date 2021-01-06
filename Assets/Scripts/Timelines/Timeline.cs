@@ -10,7 +10,7 @@ namespace ARQTimeline
     {
         #region Fields
         private readonly List<TimelineTrack> _listARQTimelineTrack = new List<TimelineTrack>();
-
+        public Text text;
 
         public float Duration { 
             get 
@@ -37,6 +37,7 @@ namespace ARQTimeline
             {
                 TimeWasChanged(this, _time);
                 _time = value;
+                text.text = _time.ToString();
             }
         }
         #endregion
@@ -94,6 +95,7 @@ namespace ARQTimeline
 
         public void Rewind(float time)
         {
+
             Time = time;
             foreach (TimelineTrack timelineTrack in _listARQTimelineTrack)
             {
@@ -101,7 +103,7 @@ namespace ARQTimeline
             }
         }
 
-        internal void FinishTimeline()
+        internal void TimelineIsFinished()
         {
             TimelineFinished?.Invoke();
         }
