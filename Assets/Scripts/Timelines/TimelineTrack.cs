@@ -7,7 +7,7 @@ namespace ARQTimeline
 {
     public abstract class TimelineTrack
     {
-        public readonly List<TimelineClip> _listARQTimelineClips = new List<TimelineClip>();
+        public List<TimelineClip> _listARQTimelineClips = new List<TimelineClip>();
 
         public float MaxEndTime { 
             get

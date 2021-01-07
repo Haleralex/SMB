@@ -43,22 +43,22 @@ namespace ARQTimeline
         public recording rec;
         private void Update()
         {
-            /*if (Input.GetKeyDown(KeyCode.K))
+            if (Input.GetKeyDown(KeyCode.K))
             {
 
                 
                 StartCoroutine(Check());
-                rec.StartSex();
+                // rec.StartSex();
             }
             if (Input.GetKeyDown(KeyCode.J))
             {
                 StartCoroutine(CheckR());
-            }*/
+            }
         }
 
         IEnumerator Check()
         {
-            for(float i=0; i < 1.5f; i+=0.01f)
+            for(float i=0; i < 2f; i+=0.01f)
             {
                 slider.value = i;
                 yield return new WaitForSeconds(0.01f);
@@ -66,7 +66,7 @@ namespace ARQTimeline
         }
         IEnumerator CheckR()
         {
-            for (float i = 1.5f; i >0.0f; i -= 0.01f)
+            for (float i = 2f; i >0.0f; i -= 0.01f)
             {
                 slider.value = i;
                 yield return new WaitForSeconds(0.01f);

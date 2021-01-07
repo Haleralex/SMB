@@ -80,6 +80,7 @@ namespace ARQTimeline
         private void MakeConnections()
         {
             List<TimelineAnimationClip> sortedNumbers = _listARQTimelineClips.OrderBy(i => i._startTime).Select(k=>k as TimelineAnimationClip).ToList();
+            _listARQTimelineClips = sortedNumbers.Select(a => a as TimelineClip).ToList(); ;
             if (sortedNumbers.Count >= 3) {
                 for (int i = 0; i < sortedNumbers.Count-2; i++)
                 {

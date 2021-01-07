@@ -21,7 +21,7 @@ namespace ARQTimeline{
             var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack, Animation>(animation);
             var timelineClip = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(0.0f, animationClip1.length, animationClip1);
             var timelineClipExtra = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(0.5f, animationClip2.length, animationClip2); 
-            //var timelineClipExtra2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1.5f, animationClip1.length, animationClip1);
+            var timelineClipExtra2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1f, animationClip1.length, animationClip1);
             _arqTimeline.text = text1;
             return _arqTimeline;
         }
