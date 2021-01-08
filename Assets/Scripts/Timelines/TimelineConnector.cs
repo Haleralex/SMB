@@ -58,7 +58,7 @@ namespace ARQTimeline
 
         IEnumerator Check()
         {
-            for(float i=0; i < 2f; i+=0.01f)
+            for(float i=0; i <= 2f; i+=0.01f)
             {
                 slider.value = i;
                 yield return new WaitForSeconds(0.01f);
