@@ -10,7 +10,6 @@ namespace ARQTimeline
     {
         #region Fields
         private readonly List<TimelineTrack> _listARQTimelineTrack = new List<TimelineTrack>();
-        public Text text;
 
         public float Duration { 
             get 
@@ -37,7 +36,6 @@ namespace ARQTimeline
             {
                 TimeWasChanged(this, _time);
                 _time = value;
-                text.text = _time.ToString();
             }
         }
         #endregion

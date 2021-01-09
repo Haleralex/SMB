@@ -13,16 +13,13 @@ namespace ARQTimeline{
         private AnimationClip animationClip1;
         [SerializeField]
         private AnimationClip animationClip2;
-        public Text text1;
-        public Text text2;
         private Timeline Create1Timeline()
         {
             var _arqTimeline = new Timeline();
             var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack, Animation>(animation);
             var timelineClip = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(0.0f, animationClip1.length, animationClip1);
             var timelineClipExtra = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(0.5f, animationClip2.length, animationClip2); 
-            var timelineClipExtra2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1f, animationClip1.length, animationClip1);
-            _arqTimeline.text = text1;
+            var timelineClipExtra2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(2f, animationClip1.length, animationClip1);
             return _arqTimeline;
         }
         [SerializeField]
@@ -51,7 +48,6 @@ namespace ARQTimeline{
             var arqTimelineAnimationTrack = _arqTimeline.CreateTrack<TimelineAnimationTrack,Animation>(animation2);
             var timelineClip2 = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, animationClip11.length, animationClip11);
             var timelineClipIdle = arqTimelineAnimationTrack.CreateClip<TimelineAnimationClip, AnimationClip>(1, animationClip12.length, animationClip12);
-            _arqTimeline.text = text2;
 
             return _arqTimeline;
         }

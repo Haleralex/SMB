@@ -54,33 +54,8 @@ namespace ARQTimeline
 
             animation[_animationClip.name].wrapMode = WrapMode.Clamp;
             animation[_animationClip.name].blendMode = AnimationBlendMode.Blend;
-            /*if (time >= 0.5f && time <= 1.0f) 
-            {
-                if (_animationClip.name == "StartToHalf")
-                    animation.Blend(_animationClip.name, Mathf.Clamp(2 - 2 * time, 0, 1), 0);
-                if (_animationClip.name == "StartToParts")
-                    animation.Blend(_animationClip.name, Mathf.Clamp(2*time-1,0,1), 0);
-            }
-            else if (time <= 0.5f)
-            {
-                if (_animationClip.name == "StartToHalf")
-                    animation.Blend(_animationClip.name, 1, 0f);
-            }
-            else if (time >= 1.0f && time <=1.5f)
-            {
-                if (_animationClip.name == "StartToParts")
-                    animation.Blend(_animationClip.name, Mathf.Clamp(3- 2*time, 0, 1), 0);
-                if (_animationClip.name == "StartToHalf")
-                    animation.Blend(_animationClip.name, Mathf.Clamp(2*time-2, 0, 1), 0);
-            }
-            else if (time >= 1.5f)
-            {
-                if (_animationClip.name == "StartToHalf")
-                    animation.Blend(_animationClip.name, 1, 0);
-            }*/
 
-
-            if (_animationClip.name == "StartToHalf")
+            /*if (_animationClip.name == "StartToHalf")
             {
                 if (time <= 0.5f)
                     animation.Blend(_animationClip.name, 1, 0f);
@@ -104,7 +79,7 @@ namespace ARQTimeline
             {
                 if(time>=1.0f && time < 4.0f)
                 {
-                    animation.Blend(_animationClip.name, 1, 0);//Mathf.Clamp(-time/3.0f + 4.0f/3.0f, 0, 1), 0);
+                    animation.Blend(_animationClip.name, 1, 0);
                 }
             }
 
@@ -118,19 +93,19 @@ namespace ARQTimeline
                 {
                     animation.Blend(_animationClip.name, 1, 0);
                 }
-            }
+            }*/
 
             animation[_animationClip.name].speed = 0;
             animation[_animationClip.name].time = time - _startTime;
             animation.Sample();
         }
-        public void Rewind<T>(T director, float time, float targetWeight, float fadeLenght)
+        public void Rewind<T>(T director, float time, float targetWeight, float fadeLenght = 0.0f)
         {
             Animation animation = director as Animation;
 
             animation[_animationClip.name].wrapMode = WrapMode.Clamp;
             animation[_animationClip.name].blendMode = AnimationBlendMode.Blend;
-
+            
             animation.Blend(_animationClip.name, targetWeight, fadeLenght);
 
             animation[_animationClip.name].speed = 0;
@@ -145,7 +120,7 @@ namespace ARQTimeline
 
             animation[_animationClip.name].wrapMode = WrapMode.Clamp;
             animation[_animationClip.name].blendMode = AnimationBlendMode.Blend;
-            
+            Debug.Log(_animationClip.name);
             animation.Blend(_animationClip.name, 0, 0);
             animation[_animationClip.name].time = time - _startTime;
             animation[_animationClip.name].speed = 0;

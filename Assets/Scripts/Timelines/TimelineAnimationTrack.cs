@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
+
 namespace ARQTimeline
 {
     public class TimelineAnimationTrack : TimelineTrack
@@ -32,27 +34,63 @@ namespace ARQTimeline
                 }
             }
         }
+            TimelineAnimationClip clipToRewind1 = null;
+            TimelineAnimationClip clipToRewind2 = null;
         public override void Rewind(float time)
         {
             foreach (TimelineClip arqTimelineClip in _listARQTimelineClips)
             {
-                if (time >= arqTimelineClip._startTime && time <= arqTimelineClip._endTime)
-                {
-                    (arqTimelineClip as TimelineAnimationClip).Rewind(_animation, time);
-                    arqTimelineClip.wasStarted = false;
-                }
-                else if (time < arqTimelineClip._startTime)
+                if (time < arqTimelineClip._startTime)
                 {
                     _animation[(arqTimelineClip as TimelineAnimationClip).AnimationClip.name].speed = 0;
-                    arqTimelineClip.wasStarted = false; 
+                    //(arqTimelineClip as TimelineAnimationClip).Rewind(_animation, arqTimelineClip._startTime, 0);
+                    arqTimelineClip.wasStarted = false;
                 }
                 else if (time > arqTimelineClip._endTime)
                 {
                     (arqTimelineClip as TimelineAnimationClip).RewindAfterPlaying(_animation, arqTimelineClip._endTime);
                     arqTimelineClip.wasStarted = true;
                 }
+                else if (time >= arqTimelineClip._startTime && time <= arqTimelineClip._endTime)
+                {
+                    if (clipToRewind1 == null)
+                    {
+                        clipToRewind1 = (arqTimelineClip as TimelineAnimationClip);
+                    }
+                    else
+                    {
+                        if (clipToRewind2 == null)
+                        {
+                            clipToRewind2 = (arqTimelineClip as TimelineAnimationClip);
+                        }
+                    }
+                    arqTimelineClip.wasStarted = false;
+                }
             }
+
+            if (clipToRewind1 == null)
+                return;
+            if (clipToRewind2 == null)
+            {
+                clipToRewind1.Rewind(_animation, time, 1);
+            }
+            else
+            {
+                AllocationWeights(clipToRewind1, clipToRewind2, time);
+            }
+            clipToRewind1 = null;
+            clipToRewind2 = null;
         }
+
+        private void AllocationWeights(TimelineAnimationClip a, TimelineAnimationClip b, float time)
+        {
+            float weight2 = (time - b._startTime) / (a._endTime - b._startTime);
+            float weight1 = 1 - weight2;
+            a.Rewind(_animation, time,weight1);
+            b.Rewind(_animation, time,weight2);
+        }
+
+
         public override void SetPlayer<T>(T director)
         {
             _animation = director as Animation;
