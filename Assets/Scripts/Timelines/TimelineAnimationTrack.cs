@@ -34,52 +34,91 @@ namespace ARQTimeline
                 }
             }
         }
-            TimelineAnimationClip clipToRewind1 = null;
-            TimelineAnimationClip clipToRewind2 = null;
+
+        private TimelineAnimationClip clipToRewind1 = null;
+
+        private TimelineAnimationClip clipToRewind2 = null;
+
+        private List<TimelineAnimationClip> toRewind = new List<TimelineAnimationClip>();
+
         public override void Rewind(float time)
         {
-            foreach (TimelineClip arqTimelineClip in _listARQTimelineClips)
-            {
-                if (time < arqTimelineClip._startTime)
-                {
-                    _animation[(arqTimelineClip as TimelineAnimationClip).AnimationClip.name].speed = 0;
-                    //(arqTimelineClip as TimelineAnimationClip).Rewind(_animation, arqTimelineClip._startTime, 0);
-                    arqTimelineClip.wasStarted = false;
-                }
-                else if (time > arqTimelineClip._endTime)
-                {
-                    (arqTimelineClip as TimelineAnimationClip).RewindAfterPlaying(_animation, arqTimelineClip._endTime);
-                    arqTimelineClip.wasStarted = true;
-                }
-                else if (time >= arqTimelineClip._startTime && time <= arqTimelineClip._endTime)
-                {
-                    if (clipToRewind1 == null)
-                    {
-                        clipToRewind1 = (arqTimelineClip as TimelineAnimationClip);
-                    }
-                    else
-                    {
-                        if (clipToRewind2 == null)
-                        {
-                            clipToRewind2 = (arqTimelineClip as TimelineAnimationClip);
-                        }
-                    }
-                    arqTimelineClip.wasStarted = false;
-                }
-            }
 
-            if (clipToRewind1 == null)
-                return;
-            if (clipToRewind2 == null)
+            if (time < _listARQTimelineClips[0]._startTime)
             {
-                clipToRewind1.Rewind(_animation, time, 1);
+                (_listARQTimelineClips[0] as TimelineAnimationClip).Rewind(_animation, _listARQTimelineClips[0]._startTime, 1, 0);
+                _listARQTimelineClips[0].wasStarted = false;
+                if (_listARQTimelineClips[1]._startTime == _listARQTimelineClips[0]._startTime)
+                {
+                    _listARQTimelineClips[1].wasStarted = false;
+                    (_listARQTimelineClips[1] as TimelineAnimationClip).Rewind(_animation, _listARQTimelineClips[1]._startTime, 1, 0);
+                }
             }
             else
             {
-                AllocationWeights(clipToRewind1, clipToRewind2, time);
-            }
-            clipToRewind1 = null;
-            clipToRewind2 = null;
+
+
+                toRewind = new List<TimelineAnimationClip>();
+
+
+                foreach (TimelineClip arqTimelineClip in _listARQTimelineClips)
+                {
+                    if(time < arqTimelineClip._startTime)
+                    {
+                        _animation[(arqTimelineClip as TimelineAnimationClip).AnimationClip.name].speed = 0;
+                        arqTimelineClip.wasStarted = false;
+                    }
+                    else if (time > arqTimelineClip._endTime)
+                    {
+                        toRewind.Add(arqTimelineClip as TimelineAnimationClip);
+                        arqTimelineClip.wasStarted = true;
+                    }
+                    else if (time >= arqTimelineClip._startTime && time <= arqTimelineClip._endTime)
+                    {
+                        if (clipToRewind1 == null)
+                        {
+                            clipToRewind1 = (arqTimelineClip as TimelineAnimationClip);
+                        }
+                        else
+                        {
+                            if (clipToRewind2 == null)
+                            {
+                                clipToRewind2 = (arqTimelineClip as TimelineAnimationClip);
+                            }
+                        }
+                        arqTimelineClip.wasStarted = false;
+                    }
+                }
+
+                if (clipToRewind1 == null)
+                {
+                    for (int i = 0; i < toRewind.Count - 1; i++)
+                    {
+                        toRewind[i].Rewind(_animation, toRewind[i]._endTime, 0, 0);
+                    }
+                    toRewind[toRewind.Count - 1].Rewind(_animation, toRewind[toRewind.Count - 1]._endTime, 1, 0);
+                    return;
+                }
+                if (clipToRewind2 == null)
+                {
+                    for (int i = 0; i < toRewind.Count; i++)
+                    {
+                        toRewind[i].Rewind(_animation, toRewind[i]._endTime, 0, 0);
+                    }
+                    clipToRewind1.Rewind(_animation, time, 1);
+                    clipToRewind1 = null;
+                }
+                else
+                {
+                    for (int i = 0; i < toRewind.Count; i++)
+                    {
+                        toRewind[i].Rewind(_animation, toRewind[i]._endTime, 0, 0);
+                    }
+                    AllocationWeights(clipToRewind1, clipToRewind2, time);
+                    clipToRewind1 = null;
+                    clipToRewind2 = null;
+                }
+            } 
         }
 
         private void AllocationWeights(TimelineAnimationClip a, TimelineAnimationClip b, float time)
